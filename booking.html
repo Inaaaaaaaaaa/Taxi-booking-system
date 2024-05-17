@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Taxi booking system</title>
+        <script>
+            document.addEventListener('DOMContentLoaded', function()
+        {
+            document.getElementById('bookingForm').addEventListener('submit', function (e)
+        {
+            e.preventDefault();
+
+            //collect data
+            const form = new FormData(this);
+
+            //send data using API
+            fetch(booking.php, { method: 'POST', body: FormData})
+            .then(Response => Reponse.text())
+            .then(data => { document.getElementById('reference').innerHTML = '<p>${data}</p>';
+        })
+        .catch(error => console.error('Error: ', error));
+        });
+        });
+        </script>
+    </head>
+
+    <body>
+        <h1>Booking taxi</h1>
+        <form id="bookingfor">
+            <!--Validate inputs before sending them to the SQL server-->
+            <label for="cname">Customer name: </label>
+            <input type="text" name="cname" required>
+            <!--Phone-->
+            <label for="phone">Customer phone: </label>
+            <input type="text" name="phone" required pattern="\d{10,12}">
+            <!--Unit number-->
+            <label for="cname">Unit number:</label>
+            <input type="text" name="unumber">
+            <!--Street number-->
+            <label for="cname">Street number: </label>
+            <input type="text" name="snumber" required>
+            <!--Street name-->
+            <label for="cname">Street name: </label>
+            <input type="text" name="stname" required>
+            <!--Suburb-->
+            <label for="cname">Suburb: </label>
+            <input type="text" name="sbname">
+            <!--Destination Suburb-->
+            <label for="cname">Destination suburb: </label>
+            <input type="text" name="dsbname">
+            <!--Pick-up Date-->
+            <label for="cname">Pick up date: </label>
+            <input type="data" name="data" value="2024-05-16" required>
+            <!--Pick-up Time-->
+            <label for="cname">Pick up time: </label>
+            <input type="time" name="time" value="18:30" required>
+        </form>
+
+        <!--Display confirmation message-->
+        <div id="reference">Your booking has been confirmed!</div>
+
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
