@@ -31,34 +31,46 @@
             <!--Validate inputs before sending them to the SQL server-->
             <label for="cname">Customer name: </label>
             <input type="text" name="cname" required>
+            <br><br>
             <!--Phone-->
             <label for="phone">Customer phone: </label>
             <input type="text" name="phone" required pattern="\d{10,12}">
+            <br><br>
             <!--Unit number-->
             <label for="cname">Unit number:</label>
             <input type="text" name="unumber">
+            <br><br>
             <!--Street number-->
             <label for="cname">Street number: </label>
             <input type="text" name="snumber" required>
+            <br><br>
             <!--Street name-->
             <label for="cname">Street name: </label>
             <input type="text" name="stname" required>
+            <br><br>
             <!--Suburb-->
             <label for="cname">Suburb: </label>
             <input type="text" name="sbname">
+            <br><br>
             <!--Destination Suburb-->
             <label for="cname">Destination suburb: </label>
             <input type="text" name="dsbname">
+            <br><br>
             <!--Pick-up Date-->
             <label for="cname">Pick up date: </label>
             <input type="data" name="data" value="2024-05-16" required>
+            <br><br>
             <!--Pick-up Time-->
             <label for="cname">Pick up time: </label>
             <input type="time" name="time" value="18:30" required>
+            <br><br>
+            
+            <!--Submit button-->
+            <input type="submit" value="Book">
         </form>
 
         <!--Display confirmation message-->
-        <div id="reference">Your booking has been confirmed!</div>
+        <div id="reference"></div>
 
     </body>
 </html>
