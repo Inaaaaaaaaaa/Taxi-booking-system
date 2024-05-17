@@ -1,5 +1,5 @@
+#creating bookings
 CREATE TABLE bookings (
-
 booking_id INT AUTO_INCREMENT PRIMARY KEY,
 booking_ref VARCHAR(10) NOT NULL,
 customer_name VARCHAR(100) NOT NULL,
@@ -14,3 +14,12 @@ pickup_time TIME NOT NULL,
 booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 status VARCHAR(20) DEFAULT 'unassigned'
 );
+
+#insert data into bookings
+INSERT INTO bookings (booking_ref, customer_name, phone, unit_number, street_number, street_name, suburb, destination_suburb, pickup_date, pickup_time, status);
+
+#
+SELECT booking_ref AS reference, pickup_date, pickup_time FROM bookings WHERE TIMESTAMPDIFF(HOUR, NOW(), CONCAT(pickup_date, ' ', pickup_time)) <= 2;
+
+#select from booking_ref 
+SELECT booking_ref AS reference, pickup_date, pickup_time FROM bookings WHERE booking_ref = '$bsearch';

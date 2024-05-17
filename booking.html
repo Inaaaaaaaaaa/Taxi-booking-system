@@ -1,100 +1,97 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Taxi booking system</title>
-        <script>
-            document.addEventListener('DOMContentLoaded', function()
-        {
-            document.getElementById('bookingForm').addEventListener('submit', function (e)
-        {
-            e.preventDefault();
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Booking System</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('bookingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
 
-            //collect data
-            const form = new FormData(this);
+                // Collect form data
+                const formData = new FormData(this);
 
-            //send data using API
-            fetch('booking.php', { method: 'POST', body: FormData})
-            .then(Response => Reponse.json())
-            .then(data => { 
-                if(data.success)
-                {
-                    document.getElementById('reference').innerHTML = 
-                    `
-                    <h2>Thank you for booking with us!</h2>
-                    <p>Booking reference number: ${data.bookingRef}</p>
-                    <p>Pick up time: ${data.pickuptime}</p>
-                    <p>Pick up date: ${data.pickupdime}</p>
-                    `;
-                }
-                else
-                {
-                    document.getElementById('reference').innerHTML = `<p style="color: red;">${data.error}</p>`;
-                }
-                    
-             })
-                .catch(error => console.error('Error: ', error));
+                // Send the data using Fetch API
+                fetch('booking.php', { method: 'POST', body: formData })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) 
+                        {
+                            // Display the confirmation message
+                            document.getElementById('reference').innerHTML = `
+                                <h2>Thank you for booking with us!</h2>
+                                <p>Booking reference number: ${data.bookingRef}</p>
+                                <p>Pick up time: ${data.pickuptime}</p>
+                                <p>Pick up date: ${data.pickupdate}</p>
+                            `;
+                        } 
+                        else 
+                        {
+                            document.getElementById('reference').innerHTML = `<p style="color: red;">${data.error}</p>`;
+                        }
+                    })
+                    .catch(error => {
+                        document.getElementById('reference').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+                    });
             });
         });
-        </script>
-    </head>
+    </script>
+</head>
 
-    <body>
-        <h1>Booking taxi</h1>
-        <form id="bookingfor">
-            <!--Validate inputs before sending them to the SQL server-->
-            <label for="cname">Customer name: </label>
-            <input type="text" name="cname" required>
-            <br><br>
-            <!--Phone-->
-            <label for="phone">Customer phone: </label>
-            <input type="text" name="phone" required pattern="\d{10,12}">
-            <br><br>
-            <!--Unit number-->
-            <label for="cname">Unit number:</label>
-            <input type="text" name="unumber">
-            <br><br>
-            <!--Street number-->
-            <label for="cname">Street number: </label>
-            <input type="text" name="snumber" required>
-            <br><br>
-            <!--Street name-->
-            <label for="cname">Street name: </label>
-            <input type="text" name="stname" required>
-            <br><br>
-            <!--Suburb-->
-            <label for="cname">Suburb: </label>
-            <input type="text" name="sbname">
-            <br><br>
-            <!--Destination Suburb-->
-            <label for="cname">Destination suburb: </label>
-            <input type="text" name="dsbname">
-            <br><br>
-            <!--Pick-up Date-->
-            <label for="cname">Pick up date: </label>
-            <input type="data" name="data" value="2024-05-16" required>
-            <br><br>
-            <!--Pick-up Time-->
-            <label for="cname">Pick up time: </label>
-            <input type="time" name="time" value="18:30" required>
-            <br><br>
-            
-            <!--Submit button-->
-            <input type="submit" value="Book">
-        </form>
+<body>
+    <h1>Book a Taxi</h1>
+    <form id="bookingForm">
+        <!-- Validate inputs before sending them to the SQL server -->
+        <label for="cname">Customer Name: </label>
+        <input type="text" id="cname" name="cname" required>
+        <br><br>
 
-        <!--Display confirmation message-->
-        <div id="reference"></div>
+        <!-- Phone -->
+        <label for="phone">Customer Phone: </label>
+        <input type="text" id="phone" name="phone" required pattern="\d{10,12}">
+        <br><br>
 
-    </body>
+        <!-- Unit Number -->
+        <label for="unumber">Unit Number:</label>
+        <input type="text" id="unumber" name="unumber">
+        <br><br>
+
+        <!-- Street Number -->
+        <label for="snumber">Street Number: </label>
+        <input type="text" id="snumber" name="snumber" required>
+        <br><br>
+
+        <!-- Street Name -->
+        <label for="stname">Street Name: </label>
+        <input type="text" id="stname" name="stname" required>
+        <br><br>
+
+        <!-- Suburb -->
+        <label for="sbname">Suburb: </label>
+        <input type="text" id="sbname" name="sbname">
+        <br><br>
+
+        <!-- Destination Suburb -->
+        <label for="dsbname">Destination Suburb:</label>
+        <input type="text" id="dsbname" name="dsbname">
+        <br><br>
+
+        <!-- Pick-Up Date -->
+        <label for="date">Pick-Up Date: </label>
+        <input type="date" id="date" name="date" value="2024-05-16" required>
+        <br><br>
+
+        <!-- Pick-Up Time -->
+        <label for="time">Pick-Up Time: </label>
+        <input type="time" id="time" name="time" value="18:30" required>
+        <br><br>
+
+        <!-- Submit Button -->
+        <input type="submit" value="Book">
+    </form>
+
+    <!-- Display confirmation message -->
+    <div id="reference"></div>
+</body>
 </html>
-
-
-
-
-
-
-
-
-

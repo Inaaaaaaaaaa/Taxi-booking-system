@@ -6,7 +6,7 @@
         //if connection failed 
         if($conn->connection_error)
         {
-            die("Connection failed");
+            die(json_encode(['success' => false, 'error' => 'Connection failed: '.$conn->connect_error]));
         }
 
         //generate a booking reference number
