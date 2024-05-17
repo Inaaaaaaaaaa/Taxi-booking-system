@@ -15,12 +15,27 @@
             const form = new FormData(this);
 
             //send data using API
-            fetch(booking.php, { method: 'POST', body: FormData})
-            .then(Response => Reponse.text())
-            .then(data => { document.getElementById('reference').innerHTML = '<p>${data}</p>';
-        })
-        .catch(error => console.error('Error: ', error));
-        });
+            fetch('booking.php', { method: 'POST', body: FormData})
+            .then(Response => Reponse.json())
+            .then(data => { 
+                if(data.success)
+                {
+                    document.getElementById('reference').innerHTML = 
+                    `
+                    <h2>Thank you for booking with us!</h2>
+                    <p>Booking reference number: ${data.bookingRef}</p>
+                    <p>Pick up time: ${data.pickuptime}</p>
+                    <p>Pick up date: ${data.pickupdime}</p>
+                    `;
+                }
+                else
+                {
+                    document.getElementById('reference').innerHTML = `<p style="color: red;">${data.error}</p>`;
+                }
+                    
+             })
+                .catch(error => console.error('Error: ', error));
+            });
         });
         </script>
     </head>

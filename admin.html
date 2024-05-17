@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Booking Request Search</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchButton').addEventListener('click', function() {
+                // Get the search input value
+                const searchInput = document.getElementById('bsearch').value.trim();
+
+                // Validate the format of the reference number
+                if (searchInput !== '' && !/^BRN\d{5}$/.test(searchInput)) {
+                    document.getElementById('result').innerHTML = '<p style="color: red;">Invalid reference number format. Please use the format BRN00001.</p>';
+                    return;
+                }
+
+                // Send the search request using Fetch API
+                fetch('admin.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ bsearch: searchInput })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    let resultHtml = '';
+
+                    if (data.error) {
+                        resultHtml = `<p style="color: red;">${data.error}</p>`;
+                    } else if (data.bookings && data.bookings.length > 0) {
+                        resultHtml = '<ul>';
+                        data.bookings.forEach(booking => {
+                            resultHtml += `<li>Reference: ${booking.reference}, Pickup Time: ${booking.pickup_time}, Pickup Date: ${booking.pickup_date}</li>`;
+                        });
+                        resultHtml += '</ul>';
+                    } else {
+                        resultHtml = '<p>No bookings found.</p>';
+                    }
+
+                    document.getElementById('result').innerHTML = resultHtml;
+                })
+                .catch(error => {
+                    document.getElementById('result').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Admin Booking Request Search</h1>
+    <form id="searchForm">
+        <!-- Text field for booking request searching -->
+        <label for="bsearch">Booking Reference Number:</label>
+        <input type="text" id="bsearch" name="bsearch">
+        <br><br>
+
+        <!-- Button to submit the search request -->
+        <input type="button" id="searchButton" name="sbutton" value="Search Booking">
+    </form>
+
+    <!-- Display search results -->
+    <div id="result"></div>
+</body>
+</html>
