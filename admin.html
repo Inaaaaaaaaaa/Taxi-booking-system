@@ -11,7 +11,8 @@
                 const searchInput = document.getElementById('bsearch').value.trim();
 
                 // Validate the format of the reference number
-                if (searchInput !== '' && !/^BRN\d{5}$/.test(searchInput)) {
+                if (searchInput !== '' && !/^BRN\d{5}$/.test(searchInput)) 
+                {
                     document.getElementById('result').innerHTML = '<p style="color: red;">Invalid reference number format. Please use the format BRN00001.</p>';
                     return;
                 }
@@ -19,7 +20,8 @@
                 // Send the search request using Fetch API
                 fetch('admin.php', {
                     method: 'POST',
-                    headers: {
+                    headers: 
+                    {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ bsearch: searchInput })
@@ -28,25 +30,86 @@
                 .then(data => {
                     let resultHtml = '';
 
-                    if (data.error) {
+                    if (data.error) 
+                    {
                         resultHtml = `<p style="color: red;">${data.error}</p>`;
-                    } else if (data.bookings && data.bookings.length > 0) {
-                        resultHtml = '<ul>';
+                    } 
+                    else if (data.bookings && data.bookings.length > 0) 
+                    {
+                        //store data in tables
+                        resultHtml = `
+                        <table border="1"> 
+                            <thead>
+                                <tr>
+                                    <th>Booking Reference Number</th>
+                                    <th>Customer Name</th>
+                                    <th>Phone</th>
+                                    <th>Pickup Suburb</th>
+                                    <th>Destination Suburb</th>
+                                    <th>Pickup Date and Time</th>
+                                    <th>Status</th>
+                                    <th>Assign</th>
+                                </tr>     
+                            </thead>
+                            <tbody>                       
+                        `;
                         data.bookings.forEach(booking => {
-                            resultHtml += `<li>Reference: ${booking.reference}, Pickup Time: ${booking.pickup_time}, Pickup Date: ${booking.pickup_date}</li>`;
+                            resultHtml += `
+                            <tr>
+                                <td>${booking.reference}</td>
+                                <td>${booking.customer_name}</td>
+                                <td>${booking.phone}</td>
+                                <td>${booking.pickup_suburb}</td>
+                                <td>${booking.destination_suburb}</td>
+                                <td>${booking.pickup_date} ${booking.pickup_time}</td>
+                                <td>${booking.status}</td>
+                                <td><button onclick="assignBooking('${booking.reference}')">Assign</button></td>
+                            </tr>
+                            `;
                         });
-                        resultHtml += '</ul>';
-                    } else {
-                        resultHtml = '<p>No bookings found.</p>';
-                    }
 
-                    document.getElementById('result').innerHTML = resultHtml;
+                        resultHtml += `
+                        </tbody>
+                        </table>
+                        `;
+                        document.getElementById('result').innerHTML = resultHtml;
+                    } 
+                    else 
+                    {
+                        document.getElementById('result').innerHTML = '<p>No bookings have been found</p>';
+                    }
                 })
                 .catch(error => {
                     document.getElementById('result').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
                 });
             });
         });
+
+        function assignBooking(reference) 
+        {
+            // Send the assign request using Fetch API
+            fetch('assign.php', {
+                method: 'POST',
+                headers: 
+                {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reference: reference })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) 
+                {
+                    // Update the status on the main page
+                    document.querySelector(`button[onclick="assignBooking('${reference}')"]`).parentNode.previousElementSibling.innerHTML = 'Assigned';
+                } 
+                else 
+                {
+                    alert(data.error);
+                }
+            })
+            .catch(error => alert('Error: ${error.message}'));
+        }
     </script>
 </head>
 <body>
