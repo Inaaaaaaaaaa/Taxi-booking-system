@@ -19,6 +19,7 @@
         else 
         {
             $sql = "SELECT booking_ref AS reference, pickup_date, pickup_time FROM bookings WHERE TIMESTAMPDIFF(HOUR, NOW(), CONCAT(pickup_date, ' ', pickup_time)) <= 2"; 
+            $result = $conn->query($sql);
         }
 
         $result = $conn->query($sql);
