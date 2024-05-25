@@ -1,3 +1,12 @@
+<!--
+    Student name: Ina Youn
+    Student ID: 21140457
+    Description: This folder has been created to store all the data from booking.html using SQL (phpmyadmin). The commands 
+    are created where the main goal of this folder is to simply fetch all the data and create a unique booking reference 
+    number, pickup time and date by using JSON. Error checking has also been created to let user know whether there was an 
+    issue retrieving data from the database.
+-->
+
 <?php
         //connecting to settings to retrieve data 
         require_once ("../../files/settings.php");
@@ -44,6 +53,7 @@
 
         if ($conn->query($sql) === TRUE) 
         {
+            //display data of bookingref, pickuptime and pickupdate
             echo json_encode([
                 'success' => true,
                 'bookingRef' => $booking_ref,

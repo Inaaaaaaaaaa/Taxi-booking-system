@@ -1,130 +1,31 @@
+<!--
+    Student name: Ina Youn
+    Student ID: 21140457
+    Description: This folder retrieves data from admin.php and js when user inputs 
+    booking reference number and clicks on the search booking button.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Booking Request Search</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('searchButton').addEventListener('click', function() {
-                // Get the search input value
-                const searchInput = document.getElementById('bsearch').value.trim();
-
-                // Validate the format of the reference number
-                if (searchInput !== '' && !/^BRN\d{5}$/.test(searchInput)) 
-                {
-                    document.getElementById('result').innerHTML = '<p style="color: red;">Invalid reference number format. Please use the format BRN00001.</p>';
-                    return;
-                }
-
-                // Send the search request using Fetch API
-                fetch('admin.php', {
-                    method: 'POST',
-                    headers: 
-                    {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ bsearch: searchInput })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    let resultHtml = '';
-
-                    if (data.error) 
-                    {
-                        resultHtml = `<p style="color: red;">${data.error}</p>`;
-                    } 
-                    else if (data.bookings && data.bookings.length > 0) 
-                    {
-                        //store data in tables
-                        resultHtml = `
-                        <table border="1"> 
-                            <thead>
-                                <tr>
-                                    <th>Booking Reference Number</th>
-                                    <th>Customer Name</th>
-                                    <th>Phone</th>
-                                    <th>Pickup Suburb</th>
-                                    <th>Destination Suburb</th>
-                                    <th>Pickup Date and Time</th>
-                                    <th>Status</th>
-                                    <th>Assign</th>
-                                </tr>     
-                            </thead>
-                            <tbody>                       
-                        `;
-                        data.bookings.forEach(booking => {
-                            resultHtml += `
-                            <tr>
-                                <td>${booking.reference}</td>
-                                <td>${booking.customerName}</td>
-                                <td>${booking.phone}</td>
-                                <td>${booking.pickupSuburb}</td>
-                                <td>${booking.destinationSuburb}</td>
-                                <td>${booking.pickup_date} ${booking.pickup_time}</td>
-                                <td>${booking.status}</td>
-                                <td><button onclick="assignBooking('${booking.reference}')">Assign</button></td>
-                            </tr>
-                            `;
-                        });
-
-                        resultHtml += `
-                        </tbody>
-                        </table>
-                        `;
-                        document.getElementById('result').innerHTML = resultHtml;
-                    } 
-                    else 
-                    {
-                        document.getElementById('result').innerHTML = '<p>No bookings have been found</p>';
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('result').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
-                });
-            });
-        });
-
-        function assignBooking(reference) 
-        {
-            // Send the assign request using Fetch API
-            fetch('assign.php', {
-                method: 'POST',
-                headers: 
-                {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ reference: reference })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) 
-                {
-                    // Update the status on the main page
-                    document.querySelector(`button[onclick="assignBooking('${reference}')"]`).parentNode.previousElementSibling.innerHTML = 'Assigned';
-                } 
-                else 
-                {
-                    alert(data.error);
-                }
-            })
-            .catch(error => alert('Error: ${error.message}'));
-        }
-    </script>
+    <script src="admin.js" defer></script>
 </head>
 <body>
     <h1>Admin Booking Request Search</h1>
     <form id="searchForm">
-        <!-- Text field for booking request searching -->
+
+        <!--Text field for booking request searching-->
         <label for="bsearch">Booking Reference Number:</label>
         <input type="text" id="bsearch" name="bsearch">
         <br><br>
 
-        <!-- Button to submit the search request -->
-        <input type="button" id="searchButton" name="sbutton" value="Search Booking">
+        <!--Button to submit the search request-->
+        <button type="button" id="searchButton" name="sbutton">Search Booking</button>
     </form>
 
-    <!-- Display search results -->
+    <!--Display results-->
     <div id="result"></div>
 </body>
 </html>
